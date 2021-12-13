@@ -1,0 +1,1 @@
+data class Instruction(val direction: String, val count: Int);
