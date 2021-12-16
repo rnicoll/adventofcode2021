@@ -1,4 +1,5 @@
 import java.lang.RuntimeException
+import java.math.BigInteger
 
 interface Packet {
     companion object {
@@ -14,7 +15,7 @@ interface Packet {
 
     val version: Int
     val versions: Int
-    val eval: Int
+    val eval: BigInteger
 }
 
 data class LiteralPacket(override val version: Int, val value: Int) : Packet {
@@ -35,9 +36,6 @@ data class LiteralPacket(override val version: Int, val value: Int) : Packet {
                     bits.add(input.removeFirst())
                 }
             }
-            while (bits.isNotEmpty() && bits.last() < 1) {
-                bits.removeLast()
-            }
             return bits.toInt()
         }
     }
@@ -45,8 +43,8 @@ data class LiteralPacket(override val version: Int, val value: Int) : Packet {
     override fun toString() = value.toString()
     override val versions: Int
         get() = this.version
-    override val eval: Int
-        get() = this.value
+    override val eval: BigInteger
+        get() = this.value.toBigInteger()
 }
 
 data class OperatorPacket(override val version: Int, val type: Int, val subpackets: List<Packet>) : Packet {
@@ -73,13 +71,13 @@ data class OperatorPacket(override val version: Int, val type: Int, val subpacke
         }
     }
 
-    override val eval: Int
+    override val eval: BigInteger
         get() = when (this.type) {
             Packet.TYPE_SUM -> {
                 this.subpackets.sumOf { it.eval }
             }
             Packet.TYPE_PRODUCT -> {
-                var product = 1
+                var product = BigInteger.ONE
                 subpackets.forEach {
                     product *= it.eval
                 }
@@ -93,23 +91,23 @@ data class OperatorPacket(override val version: Int, val type: Int, val subpacke
             }
             Packet.TYPE_GREATER_THAN -> {
                 if (this.subpackets.first().eval > this.subpackets.last().eval) {
-                    1
+                    BigInteger.ONE
                 } else {
-                    0
+                    BigInteger.ZERO
                 }
             }
             Packet.TYPE_LESS_THAN -> {
                 if (this.subpackets.first().eval < this.subpackets.last().eval) {
-                    1
+                    BigInteger.ONE
                 } else {
-                    0
+                    BigInteger.ZERO
                 }
             }
             Packet.TYPE_EQUAL -> {
                 if (this.subpackets.first().eval == this.subpackets.last().eval) {
-                    1
+                    BigInteger.ONE
                 } else {
-                    0
+                    BigInteger.ZERO
                 }
             }
             else -> throw RuntimeException("Illegal type $type")
@@ -117,10 +115,10 @@ data class OperatorPacket(override val version: Int, val type: Int, val subpacke
 
     override fun toString() = when (this.type) {
         Packet.TYPE_SUM -> {
-            this.subpackets.joinToString(" + ") { it.toString() }
+            "(" + this.subpackets.joinToString(" + ") { it.toString() } + ")"
         }
         Packet.TYPE_PRODUCT -> {
-            this.subpackets.joinToString(" * ") { it.toString() }
+            "(" + this.subpackets.joinToString(" * ") { it.toString() } + ")"
         }
         Packet.TYPE_MIN -> {
             "min(${subpackets.joinToString(",") { it.toString() }})"
@@ -129,13 +127,13 @@ data class OperatorPacket(override val version: Int, val type: Int, val subpacke
             "max(${subpackets.joinToString(",") { it.toString() }})"
         }
         Packet.TYPE_GREATER_THAN -> {
-            "${subpackets[0]} > ${subpackets[1]}"
+            "(" + "${subpackets[0]} > ${subpackets[1]}" + ")"
         }
         Packet.TYPE_LESS_THAN -> {
-            "${subpackets[0]} < ${subpackets[1]}"
+            "(" + "${subpackets[0]} < ${subpackets[1]}" + ")"
         }
         Packet.TYPE_EQUAL -> {
-            "${subpackets[0]} == ${subpackets[1]}"
+            "(" + "${subpackets[0]} == ${subpackets[1]}" + ")"
         }
         else -> throw RuntimeException("Illegal type $type")
     }

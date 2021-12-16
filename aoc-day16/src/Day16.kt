@@ -2,11 +2,22 @@ import java.nio.file.Files
 import java.nio.file.Path
 
 fun main() {
-    val input = Files.readString(Path.of("input_short")).trim().flatMap {
-        it.digitToInt(16).toBits()
+    val inputs = Files.readAllLines(Path.of("input_short")).map { line ->
+        if (line.isBlank()) {
+            null
+        } else {
+            line.trim()
+        }
+    }.filterNotNull()
+    inputs.forEach { input ->
+        println(input)
+        part1(ArrayDeque<Byte>().also { it.addAll(input.flatMap { digit ->
+            digit.digitToInt(16).toBits()
+        }) })
+        part2(ArrayDeque<Byte>().also { it.addAll(input.flatMap { digit ->
+            digit.digitToInt(16).toBits()
+        }) })
     }
-    part1(ArrayDeque<Byte>().also { it.addAll(input) })
-    part2(ArrayDeque<Byte>().also { it.addAll(input) })
 }
 
 fun part1(input: ArrayDeque<Byte>) {

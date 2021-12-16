@@ -13,6 +13,14 @@ internal class Day16KtTest {
     }
 
     @Test
+    fun toInt8() {
+        val input = "1000".toCharArray().map { it.digitToInt().toByte() }
+        val expected = 8
+        val actual = input.toInt()
+        assertEquals(expected, actual)
+    }
+
+    @Test
     fun toInt2021() {
         val input = "011111100101".toCharArray().map { it.digitToInt().toByte() }
         val expected = 2021
