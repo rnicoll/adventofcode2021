@@ -74,9 +74,11 @@ data class OperatorPacket(override val version: Int, val type: Int, val subpacke
     override val eval: BigInteger
         get() = when (this.type) {
             Packet.TYPE_SUM -> {
+                require(this.subpackets.isNotEmpty())
                 this.subpackets.sumOf { it.eval }
             }
             Packet.TYPE_PRODUCT -> {
+                require(this.subpackets.isNotEmpty())
                 var product = BigInteger.ONE
                 subpackets.forEach {
                     product *= it.eval
@@ -84,12 +86,15 @@ data class OperatorPacket(override val version: Int, val type: Int, val subpacke
                 product
             }
             Packet.TYPE_MIN -> {
+                require(this.subpackets.isNotEmpty())
                 this.subpackets.minOf { it.eval }
             }
             Packet.TYPE_MAX -> {
+                require(this.subpackets.isNotEmpty())
                 this.subpackets.maxOf { it.eval }
             }
             Packet.TYPE_GREATER_THAN -> {
+                require(this.subpackets.size == 2)
                 if (this.subpackets[0].eval > this.subpackets[1].eval) {
                     BigInteger.ONE
                 } else {
@@ -97,6 +102,7 @@ data class OperatorPacket(override val version: Int, val type: Int, val subpacke
                 }
             }
             Packet.TYPE_LESS_THAN -> {
+                require(this.subpackets.size == 2)
                 if (this.subpackets[0].eval < this.subpackets[1].eval) {
                     BigInteger.ONE
                 } else {
@@ -104,6 +110,7 @@ data class OperatorPacket(override val version: Int, val type: Int, val subpacke
                 }
             }
             Packet.TYPE_EQUAL -> {
+                require(this.subpackets.size == 2)
                 if (this.subpackets[0].eval == this.subpackets[1].eval) {
                     BigInteger.ONE
                 } else {

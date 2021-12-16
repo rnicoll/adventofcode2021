@@ -2,13 +2,13 @@ import java.nio.file.Files
 import java.nio.file.Path
 
 fun main() {
-    val inputs = Files.readAllLines(Path.of("input")).map { line ->
+    val inputs = Files.readAllLines(Path.of("input")).mapNotNull { line ->
         if (line.isBlank()) {
             null
         } else {
             line.trim()
         }
-    }.filterNotNull()
+    }
     inputs.forEach { input ->
         println(input)
         part1(parseHexToBinary(input))
