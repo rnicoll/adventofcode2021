@@ -1,6 +1,7 @@
 import org.junit.jupiter.api.Test
 
 import org.junit.jupiter.api.Assertions.*
+import java.math.BigInteger
 
 internal class Day16KtTest {
 
@@ -26,5 +27,85 @@ internal class Day16KtTest {
         val expected = 2021
         val actual = input.toInt()
         assertEquals(expected, actual)
+    }
+
+    @Test
+    fun evalSum() {
+        val input = "C200B40A82"
+        val packet = readPacket(parseHexToBinary(input))
+        val expected = BigInteger("3")
+        val actual = packet.eval
+        assertEquals(expected, actual)
+        assertEquals("(1 + 2)", packet.toString())
+    }
+
+    @Test
+    fun evalProduct() {
+        val input = "04005AC33890"
+        val packet = readPacket(parseHexToBinary(input))
+        val expected = BigInteger("54")
+        val actual = packet.eval
+        assertEquals(expected, actual)
+        assertEquals("(6 * 9)", packet.toString())
+    }
+
+    @Test
+    fun evalMax() {
+        val input = "CE00C43D881120"
+        val packet = readPacket(parseHexToBinary(input))
+        val expected = BigInteger("9")
+        val actual = packet.eval
+        assertEquals(expected, actual)
+        assertEquals("max(7,8,9)", packet.toString())
+    }
+
+    @Test
+    fun evalMin() {
+        val input = "880086C3E88112"
+        val packet = readPacket(parseHexToBinary(input))
+        val expected = BigInteger("7")
+        val actual = packet.eval
+        assertEquals(expected, actual)
+        assertEquals("min(7,8,9)", packet.toString())
+    }
+
+    @Test
+    fun evalLess() {
+        val input = "D8005AC2A8F0"
+        val packet = readPacket(parseHexToBinary(input))
+        val expected = BigInteger.ONE
+        val actual = packet.eval
+        assertEquals(expected, actual)
+        assertEquals("(5 < 15)", packet.toString())
+    }
+
+    @Test
+    fun evalGreater() {
+        val input = "F600BC2D8F"
+        val packet = readPacket(parseHexToBinary(input))
+        val expected = BigInteger.ZERO
+        val actual = packet.eval
+        assertEquals(expected, actual)
+        assertEquals("(5 > 15)", packet.toString())
+    }
+
+    @Test
+    fun evalEqual() {
+        val input = "9C005AC2F8F0"
+        val packet = readPacket(parseHexToBinary(input))
+        val expected = BigInteger.ZERO
+        val actual = packet.eval
+        assertEquals(expected, actual)
+        assertEquals("(5 == 15)", packet.toString())
+    }
+
+    @Test
+    fun evalComplex() {
+        val input = "9C0141080250320F1802104A08"
+        val packet = readPacket(parseHexToBinary(input))
+        val expected = BigInteger.ONE
+        val actual = packet.eval
+        assertEquals(expected, actual)
+        assertEquals("((1 + 3) == (2 * 2))", packet.toString())
     }
 }

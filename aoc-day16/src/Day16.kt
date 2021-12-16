@@ -2,7 +2,7 @@ import java.nio.file.Files
 import java.nio.file.Path
 
 fun main() {
-    val inputs = Files.readAllLines(Path.of("input_short")).map { line ->
+    val inputs = Files.readAllLines(Path.of("input")).map { line ->
         if (line.isBlank()) {
             null
         } else {
@@ -11,13 +11,15 @@ fun main() {
     }.filterNotNull()
     inputs.forEach { input ->
         println(input)
-        part1(ArrayDeque<Byte>().also { it.addAll(input.flatMap { digit ->
-            digit.digitToInt(16).toBits()
-        }) })
-        part2(ArrayDeque<Byte>().also { it.addAll(input.flatMap { digit ->
-            digit.digitToInt(16).toBits()
-        }) })
+        part1(parseHexToBinary(input))
+        part2(parseHexToBinary(input))
     }
+}
+
+fun parseHexToBinary(input: String) = ArrayDeque<Byte>().also {
+    it.addAll(input.flatMap { digit ->
+        digit.digitToInt(16).toBits()
+    })
 }
 
 fun part1(input: ArrayDeque<Byte>) {

@@ -90,21 +90,21 @@ data class OperatorPacket(override val version: Int, val type: Int, val subpacke
                 this.subpackets.maxOf { it.eval }
             }
             Packet.TYPE_GREATER_THAN -> {
-                if (this.subpackets.first().eval > this.subpackets.last().eval) {
+                if (this.subpackets[0].eval > this.subpackets[1].eval) {
                     BigInteger.ONE
                 } else {
                     BigInteger.ZERO
                 }
             }
             Packet.TYPE_LESS_THAN -> {
-                if (this.subpackets.first().eval < this.subpackets.last().eval) {
+                if (this.subpackets[0].eval < this.subpackets[1].eval) {
                     BigInteger.ONE
                 } else {
                     BigInteger.ZERO
                 }
             }
             Packet.TYPE_EQUAL -> {
-                if (this.subpackets.first().eval == this.subpackets.last().eval) {
+                if (this.subpackets[0].eval == this.subpackets[1].eval) {
                     BigInteger.ONE
                 } else {
                     BigInteger.ZERO
