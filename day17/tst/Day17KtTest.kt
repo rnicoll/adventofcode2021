@@ -17,7 +17,7 @@ internal class Day17KtTest {
 
     @Test
     fun launch() {
-        val target = Target(Range(20, 30), Range(-10, -5))
+        val target = TargetArea(Range(20, 30), Range(-10, -5))
         launchScenarios.forEach { scenario ->
             val expected = if (scenario.valid) {
                 ProbeTrajectory(0, 0, scenario.xVelocity, scenario.yVelocity)

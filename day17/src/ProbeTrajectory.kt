@@ -1,6 +1,6 @@
 data class ProbeTrajectory(val xPos: Int, val yPos: Int, val xVelocity: Int, val yVelocity: Int) {
     // Return - 1 if the probe has not yet reached the target, 0 if it's on target, 1 if it's missed the target
-    fun compare(target: Target): Int {
+    fun compare(target: TargetArea): Int {
         if (yPos < target.yRange.min) {
             return 1;
         }
