@@ -1,3 +1,4 @@
+import java.math.BigInteger
 import java.nio.file.Files
 import java.nio.file.Path
 
@@ -43,6 +44,21 @@ fun readPacket(input: ArrayDeque<Byte>): Packet {
             OperatorPacket.parse(input, version, type)
         }
     }
+}
+
+fun Collection<Byte>.toBigInteger(): BigInteger {
+    var value = BigInteger.ZERO
+    this.reversed().forEachIndexed { i, byte ->
+        value += when(byte.toInt()) {
+            1 -> {
+                BigInteger.ONE.shiftLeft(i)
+            }
+            else -> {
+                BigInteger.ZERO
+            }
+        }
+    }
+    return value
 }
 
 fun Collection<Byte>.toInt(): Int {

@@ -18,14 +18,14 @@ interface Packet {
     val eval: BigInteger
 }
 
-data class LiteralPacket(override val version: Int, val value: Int) : Packet {
+data class LiteralPacket(override val version: Int, val value: BigInteger) : Packet {
     companion object {
         fun parse(input: ArrayDeque<Byte>, version: Int): LiteralPacket {
             val value = readLiteral(input)
             return LiteralPacket(version, value)
         }
 
-        private fun readLiteral(input: ArrayDeque<Byte>): Int {
+        private fun readLiteral(input: ArrayDeque<Byte>): BigInteger {
             val bits = ArrayDeque<Byte>()
             var last = false
             while (!last) {
@@ -36,7 +36,7 @@ data class LiteralPacket(override val version: Int, val value: Int) : Packet {
                     bits.add(input.removeFirst())
                 }
             }
-            return bits.toInt()
+            return bits.toBigInteger()
         }
     }
 
@@ -44,7 +44,7 @@ data class LiteralPacket(override val version: Int, val value: Int) : Packet {
     override val versions: Int
         get() = this.version
     override val eval: BigInteger
-        get() = this.value.toBigInteger()
+        get() = this.value
 }
 
 data class OperatorPacket(override val version: Int, val type: Int, val subpackets: List<Packet>) : Packet {
@@ -56,7 +56,7 @@ data class OperatorPacket(override val version: Int, val type: Int, val subpacke
                 0 -> {
                     val length = input.removeFirst(15).toInt()
                     val end = input.size - length
-                    while (input.size > end) {
+                    while (input.size != end) {
                         subpackets.add(readPacket(input))
                     }
                 }
@@ -75,7 +75,11 @@ data class OperatorPacket(override val version: Int, val type: Int, val subpacke
         get() = when (this.type) {
             Packet.TYPE_SUM -> {
                 require(this.subpackets.isNotEmpty())
-                this.subpackets.sumOf { it.eval }
+                var result = BigInteger.ZERO
+                this.subpackets.forEach {
+                    result += it.eval
+                }
+                result
             }
             Packet.TYPE_PRODUCT -> {
                 require(this.subpackets.isNotEmpty())

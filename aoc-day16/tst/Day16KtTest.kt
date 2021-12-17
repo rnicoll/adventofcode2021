@@ -60,6 +60,15 @@ internal class Day16KtTest {
     }
 
     @Test
+    fun evalMaxSingle() {
+        val packet = OperatorPacket(2, Packet.TYPE_MAX, listOf(LiteralPacket(2, BigInteger("256058865"))))
+        val expected = BigInteger("256058865")
+        val actual = packet.eval
+        assertEquals(expected, actual)
+        assertEquals("max(256058865)", packet.toString())
+    }
+
+    @Test
     fun evalMin() {
         val input = "880086C3E88112"
         val packet = readPacket(parseHexToBinary(input))
