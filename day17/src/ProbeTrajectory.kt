@@ -18,8 +18,10 @@ data class ProbeTrajectory(val xPos: Int, val yPos: Int, val xVelocity: Int, val
 
     fun tick(): ProbeTrajectory = if (xVelocity > 0) {
         ProbeTrajectory(xPos + xVelocity, yPos + yVelocity, xVelocity - 1, yVelocity - 1)
-    } else {
+    } else if (xVelocity < 0) {
         ProbeTrajectory(xPos + xVelocity, yPos + yVelocity, xVelocity + 1, yVelocity - 1)
+    } else {
+        ProbeTrajectory(xPos + xVelocity, yPos + yVelocity, xVelocity, yVelocity - 1)
     }
 
     override fun toString() = "$xPos,$yPos -> $xVelocity,$yVelocity"

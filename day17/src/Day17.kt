@@ -1,8 +1,8 @@
 import kotlin.math.abs
 
 fun main() {
-    val input = "x=20..30, y=-10..-5"
-    // val input = "x=282..314, y=-80..-45"
+    // val input = "x=20..30, y=-10..-5"
+    val input = "x=282..314, y=-80..-45"
     Day17.part1(TargetArea.parse(input))
     Day17.part2(TargetArea.parse(input))
 }
@@ -13,6 +13,7 @@ object Day17 {
         val path = mutableListOf(trajectory)
         while (trajectory.compare(target) <= 0) {
             trajectory = trajectory.tick()
+            // println(trajectory)
             path.add(trajectory)
             if (trajectory.compare(target) == 0) {
                 return path
@@ -21,7 +22,7 @@ object Day17 {
         return null
     }
 
-    private fun generatePaths(target: TargetArea): List<List<ProbeTrajectory>> {
+    fun generatePaths(target: TargetArea): List<List<ProbeTrajectory>> {
         val validHeights = mutableListOf<List<ProbeTrajectory>?>()
         for (x in 1..target.xRange.max) {
             for (y in target.yRange.min..abs(target.yRange.min)) {
