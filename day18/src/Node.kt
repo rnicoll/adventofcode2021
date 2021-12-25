@@ -18,9 +18,10 @@ interface Node {
             PairNode.parse(input)
         }
     }
+    fun set(child: LeftRight, node: Node)
 }
 
-data class PairNode(val left: Node, val right: Node): Node {
+data class PairNode(var left: Node, var right: Node): Node {
     companion object {
         fun parse(input: Deque<Char>): Node {
             require(input.removeFirst() == '[')
@@ -35,6 +36,42 @@ data class PairNode(val left: Node, val right: Node): Node {
         }
     }
     override var parent: Node? = null
+
+    internal fun explode(child: LeftRight): Node {
+        val leftNumber = this.left as? NumberNode
+        val rightNumber = this.right as? NumberNode
+        require(leftNumber != null)
+        require(rightNumber != null)
+
+        findNode(child, LeftRight.LEFT, NumberNode::class.java)?.also { node ->
+            node.value += leftNumber.value
+        }
+        findNode(child, LeftRight.RIGHT, NumberNode::class.java)?.also { node ->
+            node.value += rightNumber.value
+        }
+        return NumberNode(BigInteger.ZERO).also { node ->
+            this.parent?.set(child.opposite(), node)
+        }
+    }
+
+    /**
+     * Find the left/right most node of the given type, avoiding this child node.
+     */
+    fun <T: Node> findNode(child: LeftRight, direction: LeftRight, type: Class<T>): T? {
+        if (this.parent == null) {
+            return null
+        }
+
+        return null
+    }
+
+    override fun set(child: LeftRight, node: Node) {
+        when (child) {
+            LeftRight.LEFT -> { this.left = node }
+            LeftRight.RIGHT -> { this.right = node }
+        }
+    }
+
     override fun equals(other: Any?) = (other is PairNode) && other.left == this.left && other.right == this.right
     override fun hashCode(): Int {
         var hash = 1
@@ -45,7 +82,7 @@ data class PairNode(val left: Node, val right: Node): Node {
     override fun toString() = "[$left,$right]"
 }
 
-data class NumberNode(val value: BigInteger): Node {
+data class NumberNode(var value: BigInteger): Node {
     companion object {
         fun parse(input: Deque<Char>): NumberNode {
             val builder = StringBuilder()
@@ -56,6 +93,7 @@ data class NumberNode(val value: BigInteger): Node {
         }
     }
     override var parent: Node? = null
+
     override fun equals(other: Any?) = (other is NumberNode) && other.value == this.value
     override fun hashCode() = this.value.hashCode()
     override fun toString() = value.toString()
