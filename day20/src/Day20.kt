@@ -7,16 +7,10 @@ fun main() {
     iterator.tryAdvance {
         // Drop blank line
     }
-    val image = RawImage.parse(iterator)
-    println(algorithm)
-    println("")
-    println(image)
-    println("")
-    var enhanced = Enhance(image, algorithm)
-    println(enhanced)
-    println("")
-    enhanced = Enhance(enhanced, algorithm)
-    println(enhanced)
-    println("")
-    println(enhanced.toString().toCharArray().count { it == '#' })
+    var image: Image = RawImage.parse(iterator)
+    for (i in 1..50) {
+        image = Enhance(image, algorithm)
+    }
+    // println(image)
+    println(image.toString().toCharArray().count { it == '#' })
 }
