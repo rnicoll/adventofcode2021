@@ -2,7 +2,7 @@ import java.nio.file.Files
 import java.nio.file.Path
 
 fun main() {
-    val iterator = Files.readAllLines(Path.of("input_short")).spliterator()
+    val iterator = Files.readAllLines(Path.of("input")).spliterator()
     val algorithm = Algorithm.parse(iterator)
     iterator.tryAdvance {
         // Drop blank line
@@ -18,5 +18,5 @@ fun main() {
     enhanced = Enhance(enhanced, algorithm)
     println(enhanced)
     println("")
-    // println(enhanced.pixels.sumOf { row -> row.count { it } })
+    println(enhanced.toString().toCharArray().count { it == '#' })
 }
