@@ -7,16 +7,16 @@ fun main() {
     iterator.tryAdvance {
         // Drop blank line
     }
-    val image = Image.parse(iterator)
+    val image = RawImage.parse(iterator)
     println(algorithm)
     println("")
     println(image)
     println("")
-    var enhanced = image.enhance(algorithm)
+    var enhanced = Enhance(image, algorithm)
     println(enhanced)
     println("")
-    enhanced = enhanced.enhance(algorithm)
+    enhanced = Enhance(enhanced, algorithm)
     println(enhanced)
     println("")
-    println(enhanced.pixels.sumOf { row -> row.count { it } })
+    // println(enhanced.pixels.sumOf { row -> row.count { it } })
 }

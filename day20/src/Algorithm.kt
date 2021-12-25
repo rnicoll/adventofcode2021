@@ -5,8 +5,9 @@ class Algorithm(val pixels: BooleanArray) {
         fun parse(iterator: Spliterator<String>): Algorithm {
             var line = ""
             iterator.tryAdvance { line = it }
-            return Algorithm(Image.parseRow(line))
+            return parse(line)
         }
+        fun parse(line: String) = Algorithm(RawImage.parseRow(line))
     }
 
     override fun toString() = pixels.joinToString("") {
