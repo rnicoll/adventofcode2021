@@ -1,21 +1,22 @@
-import java.util.*
+data class Processor(var w: Int = 0, var x: Int = 0, var y: Int = 0, var z: Int = 0) {
+    fun fork(instructionIdx: Int): ProcessorThread = ProcessorThread(this.copy(), instructionIdx)
 
-class Processor {
-    private val registers: EnumMap<Register, Value> = EnumMap(
-        mapOf(
-            Pair(Register.w, Value.ZERO),
-            Pair(Register.x, Value.ZERO),
-            Pair(Register.y, Value.ZERO),
-            Pair(Register.z, Value.ZERO),
-        )
-    )
+    fun get(register: Register): Int = when(register) {
+        Register.w -> {this.w}
+        Register.x -> {this.x}
+        Register.y -> {this.y}
+        Register.z -> {this.z}
+    }
 
-    fun getRegister(register: Register): Value? = registers[register]
-
-    fun setRegister(register: Register, value: Value) {
-        registers[register] = value
+    fun set(register: Register, value: Int) {
+        when(register) {
+            Register.w -> {this.w = value}
+            Register.x -> {this.x = value}
+            Register.y -> {this.y = value}
+            Register.z -> {this.z = value}
+        }
     }
 
     override fun toString() =
-        "w=${registers[Register.w]}, x=${registers[Register.x]}, y=${registers[Register.y]}, z=${registers[Register.z]}"
+        "w=$w, x=$x, y=$y, z=$z"
 }
