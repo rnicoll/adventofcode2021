@@ -9,7 +9,8 @@ sealed interface RegisterOrConstant {
         }
     }
 
-    fun read(processor: Processor): Int
+    fun readInt(processor: Processor<Int>): Int
+    fun readConstraint(processor: Processor<Value>): Value
 }
 
 enum class Register : RegisterOrConstant {
@@ -18,10 +19,12 @@ enum class Register : RegisterOrConstant {
     y,
     z;
 
-    override fun read(processor: Processor) = processor.get(this)
+    override fun readInt(processor: Processor<Int>) = processor.get(this)
+    override fun readConstraint(processor: Processor<Value>) = processor.get(this)
 }
 
 class Constant(private val value: Int): RegisterOrConstant {
     override fun toString() = value.toString()
-    override fun read(processor: Processor) = value
+    override fun readInt(processor: Processor<Int>) = value
+    override fun readConstraint(processor: Processor<Value>) = Value(setOf(this.value))
 }

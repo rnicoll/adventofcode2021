@@ -5,16 +5,16 @@ fun main() {
     val instructions = Files.readAllLines(Path.of("input"))
         .filterNot { it.isBlank() }
         .map(::parseInstruction)
-    val processor = Processor()
+    val processor = Alu()
     part1(processor, instructions)
 }
 
-fun part1(processor: Processor, instructions: List<Instruction>) {
+fun part1(processor: Alu, instructions: List<Instruction>) {
     val result = processor.process(instructions)
     println(result.second.joinToString(""))
 }
 
-val cache = mutableMapOf<Processor, Pair<Boolean, List<Int>>>()
+val cache = mutableMapOf<Alu, Pair<Boolean, List<Int>>>()
 
 fun parseInstruction(input: String): Instruction {
     val parts = input.split(" ")
