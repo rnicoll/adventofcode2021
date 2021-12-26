@@ -10,8 +10,8 @@ fun main() {
     instructions.forEach {
         println(it)
         it.apply(processor)
-        println(processor)
-        println("")
+        // println(processor)
+        // println("")
     }
 }
 

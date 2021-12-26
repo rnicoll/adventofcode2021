@@ -1,45 +1,26 @@
-import java.lang.RuntimeException
-
-data class Value(val min: Int, val max: Int) {
+data class Value(val values: Set<Int>) {
     companion object {
-        val ZERO = Value(0, 0)
+        val ZERO = Value(setOf(0))
     }
 
-    val indices: Iterable<Int>
-        get() = IntRange(min, max)
-
-    fun add(other: Value) = Value(min + other.min, max + other.max)
-    fun mul(other: Value) = Value(min * other.min, max * other.max)
-    fun div(other: Value): Value {
-        val outcomes: Set<Int> = this.indices.flatMap { a ->
-            other.indices.map { b ->
-                a / b
-            }
+    private fun calculate(other: Value, apply: (a: Int, b: Int) -> Int): Value {
+        val outcomes: Set<Int> = this.values.flatMap { a ->
+            other.values.map { b -> apply(a, b) }
         }.toSet()
-        return Value(outcomes.minOrNull()!!, outcomes.maxOrNull()!!)
+        return Value(outcomes)
     }
 
-    fun mod(other: Value): Value {
-        val outcomes: Set<Int> = this.indices.flatMap { a ->
-            other.indices.map { b ->
-                a % b
-            }
-        }.toSet()
-        return Value(outcomes.minOrNull()!!, outcomes.maxOrNull()!!)
+    fun add(other: Value) = calculate(other) { a, b -> a + b }
+    fun mul(other: Value) = calculate(other) { a, b -> a * b }
+    fun div(other: Value) = calculate(other) { a, b -> a / b }
+    fun mod(other: Value) = calculate(other) { a, b -> a % b }
+    fun eql(other: Value) = calculate(other) { a, b ->
+        if (a == b) {
+            1
+        } else {
+            0
+        }
     }
 
-    fun eql(other: Value): Value {
-        val outcomes: Set<Int> = this.indices.flatMap { a ->
-            other.indices.map { b ->
-                if (a == b) {
-                    1
-                } else {
-                    0
-                }
-            }
-        }.toSet()
-        return Value(outcomes.minOrNull()!!, outcomes.maxOrNull()!!)
-    }
-
-    override fun toString() = "$min..$max"
+    override fun toString() = "$values"
 }

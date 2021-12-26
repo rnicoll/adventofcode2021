@@ -23,5 +23,5 @@ enum class Register : RegisterOrConstant {
 
 class Constant(private val value: Int): RegisterOrConstant {
     override fun toString() = value.toString()
-    override fun read(processor: Processor) = Value(value, value)
+    override fun read(processor: Processor) = Value(setOf(value))
 }

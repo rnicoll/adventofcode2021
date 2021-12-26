@@ -6,7 +6,7 @@ sealed interface Instruction {
 class Input(val to: Register) : Instruction {
     override fun toString() = "inp $to"
     override fun apply(processor: Processor) {
-        processor.setRegister(to, Value(1, 9))
+        processor.setRegister(to, Value(setOf(1, 2, 3, 4, 5, 6, 7, 8, 9)))
     }
 }
 
