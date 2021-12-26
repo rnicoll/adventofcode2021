@@ -6,8 +6,12 @@ fun main() {
     val instructions = Files.readAllLines(Path.of("input"))
         .filterNot { it.isBlank() }
         .map(::parseInstruction)
+    val processor = Processor()
     instructions.forEach {
         println(it)
+        it.apply(processor)
+        println(processor)
+        println("")
     }
 }
 

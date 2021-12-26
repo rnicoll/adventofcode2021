@@ -8,15 +8,20 @@ sealed interface RegisterOrConstant {
             }
         }
     }
+
+    fun read(processor: Processor): Value?
 }
 
 enum class Register : RegisterOrConstant {
     w,
     x,
     y,
-    z
+    z;
+
+    override fun read(processor: Processor) = processor.getRegister(this)
 }
 
-class Constant(val value: Int): RegisterOrConstant {
+class Constant(private val value: Int): RegisterOrConstant {
     override fun toString() = value.toString()
+    override fun read(processor: Processor) = Value(value, value)
 }
