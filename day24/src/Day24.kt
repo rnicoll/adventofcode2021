@@ -11,22 +11,21 @@ fun main() {
 }
 
 fun part1(processor: Processor, instructions: List<Instruction>) {
-    val result = process(ProcessorThread(processor, 0), instructions)
+    val result = process(processor, instructions)
     println(result.second.joinToString(""))
 }
 
-val cache = mutableMapOf<ProcessorThread, Pair<Boolean, List<Int>>>()
+val cache = mutableMapOf<Processor, Pair<Boolean, List<Int>>>()
 
-fun process(thread: ProcessorThread, instructions: List<Instruction>): Pair<Boolean, List<Int>> {
-    val processor = thread.processor
-    val startIdx = thread.startIdx
+fun process(processor: Processor, instructions: List<Instruction>): Pair<Boolean, List<Int>> {
+    val startIdx = processor.instructionIdx
     for (i in startIdx until instructions.size) {
         when (val ins = instructions[i]) {
             is Input -> {
                 // Fork 9 ways
                 for (fork in 9 downTo 1) {
                     val subprocessor = processor.fork(i + 1)
-                    subprocessor.processor.set(ins.to, fork)
+                    subprocessor.set(ins.to, fork)
                     val outcome = if (cache.containsKey(subprocessor)) {
                         cache[subprocessor]!!
                     } else {
