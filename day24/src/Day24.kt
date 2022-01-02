@@ -6,11 +6,17 @@ fun main() {
         .filterNot { it.isBlank() }
         .map(::parseInstruction)
     val processor = Alu()
-    part1(processor, instructions)
+    // part1(processor, instructions)
+    part2(processor, instructions)
 }
 
 fun part1(processor: Alu, instructions: List<Instruction>) {
-    val result = processor.process(instructions)
+    val result = processor.process(instructions, listOf(9, 8, 7, 6, 5, 4, 3, 2, 1))
+    println(result.second.joinToString(""))
+}
+
+fun part2(processor: Alu, instructions: List<Instruction>) {
+    val result = processor.process(instructions, listOf(1, 2, 3, 4, 5, 6, 7, 8, 9))
     println(result.second.joinToString(""))
 }
 

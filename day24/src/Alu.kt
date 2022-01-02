@@ -49,7 +49,7 @@ data class Alu(
     private fun calculate(to: Register, from: RegisterOrConstant, f: (a: Int, b: Int) -> Int) =
         f(to.readInt(this), from.readInt(this))
 
-    fun process(instructions: List<Instruction>): Pair<Boolean, List<Int>> {
+    fun process(instructions: List<Instruction>, inputSeries: List<Int>): Pair<Boolean, List<Int>> {
         for (i in this.startIdx until instructions.size) {
             when (val ins = instructions[i]) {
                 is Input -> {
@@ -61,14 +61,14 @@ data class Alu(
                     }
 
                     // Fork 9 ways
-                    for (fork in 9 downTo 1) {
+                    for (fork in inputSeries) {
                         val subprocessor = this.fork(i + 1)
 
                         subprocessor.set(ins.to, fork)
                         val outcome = if (cache.containsKey(subprocessor)) {
                             cache[subprocessor]!!
                         } else {
-                            subprocessor.process(instructions).also {
+                            subprocessor.process(instructions, inputSeries).also {
                                 cache[subprocessor] = it
                             }
                         }
