@@ -3,17 +3,17 @@ import java.lang.StringBuilder
 object Day21  {
     const val TARGET_SCORE_PART_1 = 1000
     const val TARGET_SCORE_PART_2 = 21
-    const val INPUT_SHORT = "Player 1 starting position: 6\nPlayer 2 starting position: 8"
 }
 
 fun main() {
-    println(part1(Day21.TARGET_SCORE_PART_1))
-    println(part2(Day21.TARGET_SCORE_PART_2))
+    val positions = mapOf(Pair(Player.ONE, 6), Pair(Player.TWO, 8))
+    println(part1(Day21.TARGET_SCORE_PART_1, positions))
+    println(part2(Day21.TARGET_SCORE_PART_2, positions))
 }
 
-private fun part1(target: Int): Outcome {
-    val score1 = PlayerScore(Player.ONE, 4)
-    val score2 = PlayerScore(Player.TWO, 8)
+private fun part1(target: Int, positions: Map<Player, Int>): Outcome {
+    val score1 = PlayerScore(Player.ONE, positions[Player.ONE]!!)
+    val score2 = PlayerScore(Player.TWO, positions[Player.TWO]!!)
     val die = DeterministicDie()
     while (true) {
         if (score1.move(die.roll() + die.roll() + die.roll()) >= target) {
@@ -24,12 +24,12 @@ private fun part1(target: Int): Outcome {
     }
 }
 
-private fun part2(target: Int): Map<Player, Long> {
+private fun part2(target: Int, positions: Map<Player, Int>): Map<Player, Long> {
     val rolls: Map<Int, Int> = generateAllRolls(1..3)
     println(rolls)
     return rollPart2(
-        PlayerScore(Player.ONE, 4),
-        PlayerScore(Player.TWO, 8),
+        PlayerScore(Player.ONE, positions[Player.ONE]!!),
+        PlayerScore(Player.TWO, positions[Player.TWO]!!),
         target, rolls)
 }
 
